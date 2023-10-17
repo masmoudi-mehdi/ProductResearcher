@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const apiKey = 'AIzaSyCjHbaikGwZgRLsVcbZynIJ972pljZet_o';
 const cx = 'd1964a48cd7584d7c';
 const searchTerms = ["1800 Tequila, Silver Tequila 100% de Agave", "Absolut, Blue Vodka", "Absolut, Peppar Flavored Vodka"]; // Remplacez par les valeurs que vous souhaitez rechercher
@@ -38,6 +40,16 @@ const promises = searchTerms.map(searchTerm => fetchGoogleData(searchTerm));
 Promise.all(promises)
   .then(() => {
     console.log(results);
+
+    const resultsJSON = JSON.stringify(results, null, 2);
+
+    fs.writeFile('results.json', resultsJSON, 'utf8', (err) => {
+      if (err) {
+        console.error('Error recording results :', err);
+      } else {
+        console.log('Results successfully saved in results.json file.');
+      }
+    });
   })
   .catch(error => {
     console.error('Google search error :', error);
